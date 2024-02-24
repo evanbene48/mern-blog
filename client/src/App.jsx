@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 export default function App() {
   return (
@@ -29,7 +30,7 @@ export default function App() {
         <Route path='/projects' element={<Projects />} />
         {/* <Route path='/post/:postSlug' element={<PostPage />} /> */}
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </BrowserRouter>
   );
 }
