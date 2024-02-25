@@ -49,17 +49,31 @@ export const signIn = async (req, res, next) => {
     const { email, password } = req.body;
   
     if (!email || !password || email === '' || password === '') {
+      //mesti dikasih return, kalau enggak bakal
+      //lanjut ke bawah
       next(errorHandler(400, 'All fields are required'));
+      return;
+      // return next(errorHandler(400, 'All fields are required'));
     }
   
     try {
+      console.log("try-catch")
       const validUser = await User.findOne({ email });
       if (!validUser) {
+        //mesti dikasih return, kalau enggak bakal
+        //lanjut ke bawah
         next(errorHandler(404, 'User not found'));
+        return;
       }
+
+      console.log('test')
       const validPassword = bcryptjs.compareSync(password, validUser.password);
       if (!validPassword) {
-        return next(errorHandler(400, 'Invalid password'));
+        console.log('test')
+        //mesti dikasih return, kalau enggak bakal
+        //lanjut ke bawah
+        next(errorHandler(400, 'Invalid password'));
+        return;
       }
 
       //process.env.JWT_SECRET itu adalah
@@ -80,6 +94,7 @@ export const signIn = async (req, res, next) => {
         })
         .json(rest);
     } catch (error) {
+      console.log("error")
       next(error);
     }
   };
