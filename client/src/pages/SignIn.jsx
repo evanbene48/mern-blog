@@ -1,13 +1,21 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '../redux/user/userSlice';
 
 export default function SignIn() {
-
+  // const [loading, setLoading] = useState(false)
+  // const [errorMessage, setErrorMessage] = useState(null)
   const [formData, setFormData] = useState({})
-  const [loading, setLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const dispatch = useDispatch();
 
+  //user ini nama di Slicenya, userSlice namenya 'user'
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -17,11 +25,15 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      return setErrorMessage('Please fill out all fields.');
+      // return setErrorMessage('Please fill out all fields.');
+      return dispatch(signInFailure('Please fill out all fields.'));
     }
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      // setLoading(true);
+      // setErrorMessage(null);
+      // set 2 diatas bisa diganti dengan dispatch berikut
+      dispatch(signInStart());
+
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -31,18 +43,20 @@ export default function SignIn() {
       const data = await res.json();
 
       if (data.success === false) {
-        setLoading(false);
-        return setErrorMessage(data.message);
+        // return setErrorMessage(data.message);
+        return dispatch(signInFailure(data.message));
       }
       
       console.log('evan')
-      console.log(data)
+      
       if(res.ok) {
+        dispatch(signInSuccess(data));
         navigate('/');
       }
     } catch (error) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      // setErrorMessage(error.message);
+      // setLoading(false);
+      dispatch(signInFailure(error.message));
     }
   };
 
