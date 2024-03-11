@@ -47,6 +47,7 @@ export const signup = async (req, res,next) => {
 
 export const signIn = async (req, res, next) => {
     const { email, password } = req.body;
+    
   
     if (!email || !password || email === '' || password === '') {
       //mesti dikasih return, kalau enggak bakal
@@ -57,7 +58,6 @@ export const signIn = async (req, res, next) => {
     }
   
     try {
-      console.log("try-catch")
       const validUser = await User.findOne({ email });
       if (!validUser) {
         //mesti dikasih return, kalau enggak bakal
@@ -66,10 +66,8 @@ export const signIn = async (req, res, next) => {
         return;
       }
 
-      console.log('test')
       const validPassword = bcryptjs.compareSync(password, validUser.password);
       if (!validPassword) {
-        console.log('test')
         //mesti dikasih return, kalau enggak bakal
         //lanjut ke bawah
         next(errorHandler(400, 'Invalid password'));
@@ -83,9 +81,8 @@ export const signIn = async (req, res, next) => {
         process.env.JWT_SECRET
       );
   
-      const { password, ...rest } = validUser._doc;
+      const { password:pass, ...rest } = validUser._doc;
 
-    //   console.log(validUser._doc)
   
       res
         .status(200)
@@ -94,7 +91,7 @@ export const signIn = async (req, res, next) => {
         })
         .json(rest);
     } catch (error) {
-      console.log("error")
+      
       next(error);
     }
   };
@@ -123,7 +120,7 @@ export const google = async(req,res,next) =>{
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
-      console.log(generatedPassword)
+      
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       
       const newUser = new User({
