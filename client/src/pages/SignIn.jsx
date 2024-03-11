@@ -20,7 +20,6 @@ export default function SignIn() {
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
-    console.log(formData)
   };
 
   const handleSubmit = async (e) => {
@@ -47,8 +46,6 @@ export default function SignIn() {
         // return setErrorMessage(data.message);
         return dispatch(signInFailure(data.message));
       }
-      
-      console.log('evan')
       
       if(res.ok) {
         dispatch(signInSuccess(data));

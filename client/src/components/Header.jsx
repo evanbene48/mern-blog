@@ -18,7 +18,6 @@ export default function Header() {
       dispatch(toggleTheme())
     }
 
-    console.log(currentUser);
     return (
         <Navbar className='border-b-2'>
           <Link

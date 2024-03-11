@@ -12,7 +12,6 @@ export default function SignUp() {
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
-    console.log(formData)
   };
 
   const handleSubmit = async (e) => {
@@ -36,8 +35,6 @@ export default function SignUp() {
         return setErrorMessage(data.message);
       }
       
-      console.log('evan')
-      console.log(data)
       if(res.ok) {
         navigate('/sign-in');
       }

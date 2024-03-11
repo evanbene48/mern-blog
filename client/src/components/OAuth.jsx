@@ -32,7 +32,6 @@ export default function OAuth() {
                 }),
                 })
             const data = await res.json()
-            console.log(resultsFromGoogle)
             if (res.ok){
                 dispatch(signInSuccess(data))
                 navigate('/')

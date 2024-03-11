@@ -22,7 +22,6 @@ export default function DashSidebar() {
     if (tabFromUrl) {
       setTab(tabFromUrl);
     }
-    console.log(tabFromUrl)
   }, [location.search]);
 
   return (
