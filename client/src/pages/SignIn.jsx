@@ -10,14 +10,17 @@ import {
 import OAuth from '../components/OAuth';
 
 export default function SignIn() {
-  // const [loading, setLoading] = useState(false)
-  // const [errorMessage, setErrorMessage] = useState(null)
-  const [formData, setFormData] = useState({})
   const dispatch = useDispatch();
 
-  //user ini nama di Slicenya, userSlice namenya 'user'
+  // const [loading, setLoading] = useState(false)
+  // const [errorMessage, setErrorMessage] = useState(null)
+  //  2 setState diatas bisa diganti dengan useSelector berikut
+  //  user ini nama di Slicenya, userSlice namenya 'user'
   const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const [formData, setFormData] = useState({})
+  
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
