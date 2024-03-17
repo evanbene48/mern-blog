@@ -21,10 +21,7 @@ export default function CreatePost() {
   const [publishError,setPublishError] = useState(null)
   
   // normal variable
-
-  const handleSubmit = () =>{
-
-  }
+  const navigate = useNavigate();
 
   const handleUpdloadImage = async () =>{
     try {
@@ -63,6 +60,31 @@ export default function CreatePost() {
       setImageUploadError('Image upload failed');
       setImageUploadProgress(null);
       console.log(error);
+    }
+  }
+
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/post/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
+
+      if (res.ok) {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+    } catch (error) {
+      setPublishError('Something went wrong');
     }
   }
 
@@ -142,7 +164,11 @@ export default function CreatePost() {
         <Button type='submit' gradientDuoTone='purpleToPink'>
           Publish
         </Button>
-        
+        {publishError && (
+          <Alert className='mt-5' color='failure'>
+            {publishError}
+          </Alert>
+        )}
       </form>
         
     </div>
