@@ -51,21 +51,37 @@ export default function DashSidebar() {
     //screennya medium maka widthnya = 14 rem
     <Sidebar className='w-full md:w-56'>
       <Sidebar.Items>
-        <Sidebar.ItemGroup
-        >
+      <Sidebar.ItemGroup className='flex flex-col gap-1'>
+          {/* Profile */}
           <Link to='/dashboard?tab=profile'>
             {/* as='div' dipakai agar tidak muncul error  */}
             <Sidebar.Item
               active={tab === 'profile'}
               
               icon={HiUser}
-              label={'User'}
+              label={currentUser.isAdmin ? 'Admin' : 'User'}
               labelColor='dark'
               as='div'
             >
               Profile
             </Sidebar.Item>
           </Link>
+          {/* Posts */}
+          {currentUser.isAdmin && 
+          <Link to='/dashboard?tab=posts'>
+            {/* as='div' dipakai agar tidak muncul error  */}
+            <Sidebar.Item
+              active={tab === 'posts'}
+              icon={HiDocumentText}
+              // label={'Posts'}
+              // labelColor='dark'
+              as='div'
+            >
+              Posts
+            </Sidebar.Item>
+          </Link>}
+          
+
           <Sidebar.Item
               icon={HiArrowSmRight}
               className='cursor-pointer'
