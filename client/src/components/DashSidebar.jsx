@@ -80,8 +80,21 @@ export default function DashSidebar() {
               Posts
             </Sidebar.Item>
           </Link>}
-          
 
+          {/* Users */}
+          {currentUser.isAdmin && 
+          <Link to='/dashboard?tab=users'>
+            {/* as='div' dipakai agar tidak muncul error  */}
+            <Sidebar.Item
+              active={tab === 'users'}
+              icon={HiOutlineUserGroup}
+              as='div'
+            >
+              Users
+            </Sidebar.Item>
+          </Link>}
+
+          {/* SignOut */}
           <Sidebar.Item
               icon={HiArrowSmRight}
               className='cursor-pointer'
