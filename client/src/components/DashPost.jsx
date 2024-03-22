@@ -10,13 +10,12 @@ export default function DashPost() {
   const [userPosts, setUserPosts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState('');
-  console.log(userPosts)
   useEffect(()=>{
+    console.log('DashPost')
     const fetchPosts = async () =>{
       try {
         const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
         const data = await res.json();
-        console.log('test')
         if (res.ok) {
           setUserPosts(data.posts);
           if (data.posts.length <= 9) {
