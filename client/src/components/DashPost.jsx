@@ -14,8 +14,10 @@ export default function DashPost() {
     console.log('DashPost')
     const fetchPosts = async () =>{
       try {
+        console.log('fet')
         const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
         const data = await res.json();
+        console.log(data)
         if (res.ok) {
           setUserPosts(data.posts);
           if (data.posts.length <= 9) {
