@@ -17,7 +17,6 @@ export default function Comment({
   const [editedContent, setEditedContent] = useState(comment.content);
   const { currentUser } = useSelector((state) => state.user);
   useEffect(() => {
-    console.log('hai 2')
     const getUser = async () => {
       try {
         const res = await fetch(`/api/user/${comment.userId}`);

@@ -13,9 +13,9 @@ export default function CommentSection({ postId }) {
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
   const navigate = useNavigate();
-  console.log(comment)
 
   useEffect(() => {
+    console.log('comment section')
     const getComments = async () => {
       try {
         const res = await fetch(`/api/comment/getPostComments/${postId}`);
@@ -69,22 +69,22 @@ export default function CommentSection({ postId }) {
   };
 
   const handleDelete = async (commentId) => {
-    // setShowModal(false);
-    // try {
-    //   if (!currentUser) {
-    //     navigate('/sign-in');
-    //     return;
-    //   }
-    //   const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
-    //     method: 'DELETE',
-    //   });
-    //   if (res.ok) {
-    //     const data = await res.json();
-    //     setComments(comments.filter((comment) => comment._id !== commentId));
-    //   }
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
+    setShowModal(false);
+    try {
+      if (!currentUser) {
+        navigate('/sign-in');
+        return;
+      }
+      const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(comments.filter((comment) => comment._id !== commentId));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -158,10 +158,10 @@ export default function CommentSection({ postId }) {
               <p>{comments.length}</p>
             </div>
           </div>
-          {comments.map((comment) => (
+          {comments.map((comment1) => (
             <Comment
-              key={comment._id}
-              comment={comment}
+              key={comment1._id}
+              comment={comment1}
               onEdit={handleEdit}
               onDelete={(commentId) => {
                 setShowModal(true);
