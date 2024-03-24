@@ -102,6 +102,9 @@ export default function PostPage() {
         {/* Comment Section */}
         {post && <CommentSection postId={post._id} />}
 
+        {/* flex = flexible */}
+        {/* flex-col = flexible ke samping */}
+        {/* items-center = biar item di dalam divnya ke tengah */}        
         <div className='flex flex-col justify-center items-center mb-5'>
             <h1 className='text-xl mt-5'>Recent articles</h1>
             <div className='flex flex-wrap gap-5 mt-5 justify-center'>
