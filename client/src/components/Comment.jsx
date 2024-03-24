@@ -5,12 +5,19 @@ import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 import { set } from 'mongoose';
 
-export default function Comment({ comment, onLike, onEdit, onDelete }) {
+export default function Comment({ 
+  comment, 
+  onEdit, 
+  onDelete,
+  comments,
+  setComments
+}) {
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const { currentUser } = useSelector((state) => state.user);
   useEffect(() => {
+    console.log('hai 2')
     const getUser = async () => {
       try {
         const res = await fetch(`/api/user/${comment.userId}`);
@@ -23,7 +30,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
       }
     };
     getUser();
-  }, [comment]);
+  }, []);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -49,16 +56,48 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
       console.log(error.message);
     }
   };
+
+  const handleLike = async (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate('/sign-in');
+        return;
+      }
+      const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+        method: 'PUT',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className='flex p-4 border-b dark:border-gray-600 text-sm'>
-      <div className='flex-shrink-0 mr-3'>
+      {/* image */}
+      <div className='flex-shrink-0 mr-3 '>
         <img
           className='w-10 h-10 rounded-full bg-gray-200'
           src={user.profilePicture}
           alt={user.username}
         />
       </div>
+
       <div className='flex-1'>
+        {/* username + moment */}
         <div className='flex items-center mb-1'>
           <span className='font-bold mr-1 text-xs truncate'>
             {user ? `@${user.username}` : 'anonymous user'}
@@ -67,6 +106,8 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
             {moment(comment.createdAt).fromNow()}
           </span>
         </div>
+        
+        {/* Edit conditional */}
         {isEditing ? (
           <>
             <Textarea
@@ -74,7 +115,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
               value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
             />
-            <div className='flex justify-end gap-2 text-xs'>
+            <div className='flex justify-end gap-2 text-xs'>              
               <Button
                 type='button'
                 size='sm'
@@ -83,6 +124,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
               >
                 Save
               </Button>
+
               <Button
                 type='button'
                 size='sm'
@@ -96,11 +138,12 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
           </>
         ) : (
           <>
+          {/* comment content */}
             <p className='text-gray-500 pb-2'>{comment.content}</p>
             <div className='flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2'>
               <button
                 type='button'
-                onClick={() => onLike(comment._id)}
+                onClick={() => handleLike(comment._id)}
                 className={`text-gray-400 hover:text-blue-500 ${
                   currentUser &&
                   comment.likes.includes(currentUser._id) &&
@@ -109,12 +152,14 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
               >
                 <FaThumbsUp className='text-sm' />
               </button>
+
               <p className='text-gray-400'>
                 {comment.numberOfLikes > 0 &&
                   comment.numberOfLikes +
                     ' ' +
                     (comment.numberOfLikes === 1 ? 'like' : 'likes')}
               </p>
+
               {currentUser &&
                 (currentUser._id === comment.userId || currentUser.isAdmin) && (
                   <>
