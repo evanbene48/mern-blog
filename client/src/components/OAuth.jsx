@@ -18,6 +18,7 @@ export default function OAuth() {
     const auth = getAuth(app)
 
     const handleGoogleClick = async() =>{
+        console.log('handleGoogleClick')
         const provider = new GoogleAuthProvider()
         
         provider.setCustomParameters({ prompt: 'select_account' })
